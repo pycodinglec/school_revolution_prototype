@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="학급 종합 관리 시스템 - 시간표, D-Day, 급식, 타이머, 성적계산기">
+    <meta name="keywords" content="학교, 시간표, 급식, 성적계산, 학급관리">
+    <meta name="author" content="ClassHub">
+    <title>ClassHub - 학급 종합 관리 시스템</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🎓</span>
+                    <span class="logo-text">ClassHub</span>
+                </h1>
+                <div class="header-actions">
+                    <button class="btn-icon" id="themeToggle" aria-label="다크모드 전환">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                    <button class="btn-icon" id="settingsBtn" aria-label="설정">
+                        <span>⚙️</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="main">
+        <div class="container">
+            <!-- D-Day 섹션 -->
+            <section class="section dday-section">
+                <div class="section-header">
+                    <h2 class="section-title">⏰ D-Day</h2>
+                    <button class="btn-add" id="addDdayBtn">+ 추가</button>
+                </div>
+                <div class="dday-grid" id="ddayGrid">
+                    <!-- D-Day 카드들이 동적으로 추가됩니다 -->
+                </div>
+            </section>
+
+            <!-- 메인 그리드 -->
+            <div class="main-grid">
+                <!-- 시간표 섹션 -->
+                <section class="section timetable-section">
+                    <div class="section-header">
+                        <h2 class="section-title">📅 시간표</h2>
+                        <div class="timetable-controls">
+                            <button class="btn-small" id="editTimetableBtn">편집</button>
+                        </div>
+                    </div>
+                    <div class="timetable-container">
+                        <div class="day-selector" id="daySelector">
+                            <button class="day-btn" data-day="0">월</button>
+                            <button class="day-btn" data-day="1">화</button>
+                            <button class="day-btn" data-day="2">수</button>
+                            <button class="day-btn" data-day="3">목</button>
+                            <button class="day-btn" data-day="4">금</button>
+                        </div>
+                        <div class="timetable" id="timetable">
+                            <!-- 시간표가 동적으로 추가됩니다 -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 급식 섹션 -->
+                <section class="section meal-section">
+                    <div class="section-header">
+                        <h2 class="section-title">🍽️ 이번 주 급식</h2>
+                        <button class="btn-small" id="editMealBtn">편집</button>
+                    </div>
+                    <div class="meal-container" id="mealContainer">
+                        <!-- 급식 정보가 동적으로 추가됩니다 -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- 타이머 & 성적 계산기 그리드 -->
+            <div class="tools-grid">
+                <!-- 학습 타이머 -->
+                <section class="section timer-section">
+                    <div class="section-header">
+                        <h2 class="section-title">⏱️ 학습 타이머</h2>
+                    </div>
+                    <div class="timer-container">
+                        <div class="timer-display" id="timerDisplay">25:00</div>
+                        <div class="timer-label" id="timerLabel">집중 시간</div>
+                        <div class="timer-controls">
+                            <button class="btn-timer" id="startTimerBtn">시작</button>
+                            <button class="btn-timer secondary" id="resetTimerBtn">초기화</button>
+                        </div>
+                        <div class="timer-settings">
+                            <div class="setting-row">
+                                <label>집중 시간</label>
+                                <input type="number" id="focusTime" value="25" min="1" max="60">
+                                <span>분</span>
+                            </div>
+                            <div class="setting-row">
+                                <label>휴식 시간</label>
+                                <input type="number" id="breakTime" value="5" min="1" max="30">
+                                <span>분</span>
+                            </div>
+                        </div>
+                        <div class="timer-stats" id="timerStats">
+                            <div class="stat-item">
+                                <span class="stat-label">오늘</span>
+                                <span class="stat-value" id="todayCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">이번 주</span>
+                                <span class="stat-value" id="weekCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 성적 계산기 -->
+                <section class="section grade-section">
+                    <div class="section-header">
+                        <h2 class="section-title">📊 성적 계산기</h2>
+                    </div>
+                    <div class="grade-container">
+                        <div class="grade-tabs">
+                            <button class="grade-tab active" data-tab="naesin">내신</button>
+                            <button class="grade-tab" data-tab="suneung">수능</button>
+                        </div>
+
+                        <!-- 내신 계산기 -->
+                        <div class="grade-tab-content active" id="naesinTab">
+                            <div class="grade-input-group">
+                                <label>총 인원</label>
+                                <input type="number" id="totalStudents" placeholder="예: 30" min="1">
+                            </div>
+                            <div class="grade-input-group">
+                                <label>내 등수</label>
+                                <input type="number" id="myRank" placeholder="예: 5" min="1">
+                            </div>
+                            <button class="btn-calculate" id="calculateNaesinBtn">계산하기</button>
+                            <div class="grade-result" id="naesinResult"></div>
+                        </div>
+
+                        <!-- 수능 계산기 -->
+                        <div class="grade-tab-content" id="suneungTab">
+                            <div class="grade-input-group">
+                                <label>원점수</label>
+                                <input type="number" id="rawScore" placeholder="예: 85" min="0" max="100">
+                            </div>
+                            <div class="grade-input-group">
+                                <label>평균</label>
+                                <input type="number" id="avgScore" placeholder="예: 70" min="0" max="100" step="0.1">
+                            </div>
+                            <div class="grade-input-group">
+                                <label>표준편차</label>
+                                <input type="number" id="stdDev" placeholder="예: 15" min="0" max="50" step="0.1">
+                            </div>
+                            <button class="btn-calculate" id="calculateSuneungBtn">계산하기</button>
+                            <div class="grade-result" id="suneungResult"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 공지사항 & 할일 -->
+            <div class="bottom-grid">
+                <!-- 공지사항 -->
+                <section class="section notice-section">
+                    <div class="section-header">
+                        <h2 class="section-title">📢 공지사항</h2>
+                        <button class="btn-add" id="addNoticeBtn">+ 추가</button>
+                    </div>
+                    <div class="notice-list" id="noticeList">
+                        <!-- 공지사항이 동적으로 추가됩니다 -->
+                    </div>
+                </section>
+
+                <!-- 할일 관리 -->
+                <section class="section todo-section">
+                    <div class="section-header">
+                        <h2 class="section-title">🎯 할일 / 과제</h2>
+                        <button class="btn-add" id="addTodoBtn">+ 추가</button>
+                    </div>
+                    <div class="todo-input-group">
+                        <input type="text" id="todoInput" placeholder="할일을 입력하세요..." class="todo-input">
+                        <button class="btn-add-todo" id="addTodoSubmitBtn">추가</button>
+                    </div>
+                    <div class="todo-list" id="todoList">
+                        <!-- 할일이 동적으로 추가됩니다 -->
+                    </div>
+                    <div class="todo-stats">
+                        <span>완료: <strong id="completedCount">0</strong></span>
+                        <span>남은 일: <strong id="remainingCount">0</strong></span>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 ClassHub. 학교 현장을 위한 스마트 솔루션</p>
+            <div class="footer-links">
+                <button class="btn-link" id="exportDataBtn">데이터 내보내기</button>
+                <button class="btn-link" id="importDataBtn">데이터 가져오기</button>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+            </div>
+        </div>
+    </footer>
+
+    <!-- 모달: D-Day 추가 -->
+    <div class="modal" id="ddayModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>D-Day 추가</h3>
+                <button class="modal-close" id="closeDdayModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>이벤트 이름</label>
+                    <input type="text" id="ddayTitle" placeholder="예: 2025학년도 수능">
+                </div>
+                <div class="form-group">
+                    <label>날짜</label>
+                    <input type="date" id="ddayDate">
+                </div>
+                <div class="form-group">
+                    <label>색상</label>
+                    <div class="color-picker">
+                        <button class="color-btn" data-color="#4F46E5" style="background: #4F46E5"></button>
+                        <button class="color-btn" data-color="#06B6D4" style="background: #06B6D4"></button>
+                        <button class="color-btn" data-color="#10B981" style="background: #10B981"></button>
+                        <button class="color-btn" data-color="#F59E0B" style="background: #F59E0B"></button>
+                        <button class="color-btn" data-color="#EF4444" style="background: #EF4444"></button>
+                        <button class="color-btn" data-color="#8B5CF6" style="background: #8B5CF6"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelDdayBtn">취소</button>
+                <button class="btn-primary" id="saveDdayBtn">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모달: 공지사항 추가 -->
+    <div class="modal" id="noticeModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>공지사항 추가</h3>
+                <button class="modal-close" id="closeNoticeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>제목</label>
+                    <input type="text" id="noticeTitle" placeholder="공지사항 제목">
+                </div>
+                <div class="form-group">
+                    <label>내용</label>
+                    <textarea id="noticeContent" rows="4" placeholder="공지사항 내용"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="noticeImportant">
+                        중요 공지
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelNoticeBtn">취소</button>
+                <button class="btn-primary" id="saveNoticeBtn">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 모달: 시간표 편집 -->
+    <div class="modal" id="timetableModal">
+        <div class="modal-content modal-large">
+            <div class="modal-header">
+                <h3>시간표 편집</h3>
+                <button class="modal-close" id="closeTimetableModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="timetable-editor" id="timetableEditor">
+                    <!-- 시간표 편집기가 동적으로 생성됩니다 -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelTimetableBtn">취소</button>
+                <button class="btn-primary" id="saveTimetableBtn">저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/storage.js"></script>
+    <script src="js/dday.js"></script>
+    <script src="js/timetable.js"></script>
+    <script src="js/meal.js"></script>
+    <script src="js/timer.js"></script>
+    <script src="js/grade.js"></script>
+    <script src="js/notice.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
